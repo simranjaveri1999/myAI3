@@ -54,6 +54,10 @@ ${TOOL_CALLING_PROMPT}
 ${TONE_STYLE_PROMPT}
 </tone_style>
 
+<image_handling>
+${UDYAM_IMAGE_PROMPT}
+</image_handling>
+
 <guardrails>
 ${GUARDRAILS_PROMPT}
 </guardrails>
