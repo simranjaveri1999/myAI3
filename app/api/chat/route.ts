@@ -15,7 +15,7 @@ import { vectorDatabaseSearch } from "./tools/search-vector-database";
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  // ✅ 1) Read profile along with messages
+  // Read messages and optional profile coming from useChat body
   const {
     messages,
     profile,
@@ -62,45 +62,4 @@ export async function POST(req: Request) {
               id: textId,
             });
 
-            writer.write({
-              type: "finish",
-            });
-          },
-        });
-
-        return createUIMessageStreamResponse({ stream });
-      }
-    }
-  }
-
-  // ✅ 2) Inject profile into the system prompt so model always sees it
-  const systemWithProfile =
-    SYSTEM_PROMPT +
-    `
-    
-Business profile (if provided by the user):
-${profile ? JSON.stringify(profile, null, 2) : "No profile uploaded yet."}
-`;
-
-  const result = streamText({
-    model: MODEL,
-    system: systemWithProfile,
-    messages: convertToModelMessages(messages),
-    tools: {
-      webSearch,
-      vectorDatabaseSearch,
-    },
-    stopWhen: stepCountIs(10),
-    providerOptions: {
-      openai: {
-        reasoningSummary: "auto",
-        reasoningEffort: "low",
-        parallelToolCalls: false,
-      },
-    },
-  });
-
-  return result.toUIMessageStreamResponse({
-    sendReasoning: true,
-  });
-}
+            writer.wr
