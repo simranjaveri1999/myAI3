@@ -50,9 +50,7 @@ export const SCHEME_OUTPUT_PROMPT = `
 \`\`\`
 
 - The JSON must be valid and parseable.
-- "eligibilityScore" is an integer between 0 and 10 that reflects how confident you are that the user is eligible based on the profile you have.
-- For a given user profile and a given scheme, keep "eligibilityScore" consistent across answers. Only change the score if you have new or corrected information about the user or the scheme.
-- Do not use randomness when choosing the score. Base it only on how strongly the user's profile matches the scheme's formal eligibility criteria.
+- "eligibilityScore" is an integer between 0 and 10 that reflects how strongly the user's profile matches the scheme's formal eligibility criteria.For a given user profile and a given scheme, keep "eligibilityScore" consistent across answers. Only change the score if you have new or corrected information about the user or the scheme.
 - You can also write normal explanatory text before or after the JSON block, but the JSON must be present whenever you recommend schemes.
 - If you do not have an official URL, set "applicationUrl" to an empty string.
 `;
