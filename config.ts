@@ -33,7 +33,7 @@ export const DATE_AND_TIME = getDateAndTime();
 export const AI_NAME = "MSME Scheme Guide";
 export const OWNER_NAME = "Simran Javeri";
 
-export const WELCOME_MESSAGE = `Hello! I'm ${AI_NAME}, an AI assistant created by ${OWNER_NAME}. Tell me about your business or upload your Udhyam and I will instantly match all government schemes and grants you are eligible for. `
+export const WELCOME_MESSAGE = `Hello! I'm ${AI_NAME}, an AI assistant created by ${OWNER_NAME}. I can instantly match all government schemes and grants you are eligible for. `
 
 export const CLEAR_CHAT_TEXT = "New";
 
