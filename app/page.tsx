@@ -27,12 +27,20 @@ const formSchema = z.object({
     .max(2000, "Message must be at most 2000 characters."),
 });
 
-const STORAGE_KEY = "chat-messages";
+const STORAGE_KEY = 'chat-messages';
+
+type FilePart = {
+  type: "file";
+  filename: string;
+  mediaType: string;
+  url: string;
+};
 
 type StorageData = {
   messages: UIMessage[];
   durations: Record<string, number>;
 };
+
 
 const loadMessagesFromStorage = (): {
   messages: UIMessage[];
