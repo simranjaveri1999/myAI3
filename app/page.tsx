@@ -279,46 +279,75 @@ export default function Chat() {
                           Message
                         </FieldLabel>
                         <div className="relative h-13">
-                          <Input
-                            {...field}
-                            id="chat-form-message"
-                            className="h-15 pr-15 pl-5 bg-card rounded-[20px]"
-                            placeholder="Type your message here..."
-                            disabled={status === "streaming"}
-                            aria-invalid={fieldState.invalid}
-                            autoComplete="off"
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" && !e.shiftKey) {
-                                e.preventDefault();
-                                form.handleSubmit(onSubmit)();
-                              }
-                            }}
-                          />
+  {/* Hidden file input for image upload */}
+  <input
+    ref={fileInputRef}
+    type="file"
+    accept="image/*"
+    className="hidden"
+    onChange={(event) => {
+      const selectedFiles = event.target.files;
+      if (selectedFiles && selectedFiles.length > 0) {
+        setFiles(selectedFiles);
+      } else {
+        setFiles(null);
+      }
+    }}
+  />
 
-                          {(status === "ready" || status === "error") && (
-                            <Button
-                              className="absolute right-3 top-3 rounded-full"
-                              type="submit"
-                              disabled={!field.value.trim()}
-                              size="icon"
-                            >
-                              <ArrowUp className="size-4" />
-                            </Button>
-                          )}
+  {/* Upload button on the left */}
+  <Button
+    type="button"
+    size="icon"
+    variant="ghost"
+    className="absolute left-2 top-2 rounded-full"
+    onClick={() => fileInputRef.current?.click()}
+    disabled={status === "streaming"}
+  >
+    <PlusIcon className="size-4" />
+  </Button>
 
-                          {(status === "streaming" ||
-                            status === "submitted") && (
-                            <Button
-                              className="absolute right-2 top-2 rounded-full"
-                              size="icon"
-                              onClick={() => {
-                                stop();
-                              }}
-                            >
-                              <Square className="size-4" />
-                            </Button>
-                          )}
-                        </div>
+  {/* Text input */}
+  <Input
+    {...field}
+    id="chat-form-message"
+    className="h-15 pr-15 pl-10 bg-card rounded-[20px]"
+    placeholder="Type your message here..."
+    disabled={status === "streaming"}
+    aria-invalid={fieldState.invalid}
+    autoComplete="off"
+    onKeyDown={(e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        form.handleSubmit(onSubmit)();
+      }
+    }}
+  />
+
+  {/* Send button or stop button */}
+  {(status == "ready" || status == "error") && (
+    <Button
+      className="absolute right-3 top-3 rounded-full"
+      type="submit"
+      disabled={!field.value.trim()}
+      size="icon"
+    >
+      <ArrowUp className="size-4" />
+    </Button>
+  )}
+  {(status == "streaming" || status == "submitted") && (
+    <Button
+      className="absolute right-2 top-2 rounded-full"
+      size="icon"
+      onClick={() => {
+        stop();
+      }}
+    >
+      <Square className="size-4" />
+    </Button>
+  )}
+</div>
+
                       </Field>
                     )}
                   />
