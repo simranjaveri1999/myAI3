@@ -241,11 +241,17 @@ export default function Chat() {
             {isClient ? (
               <>
                 <MessageWall
-                  messages={messages}
-                  status={status}
-                  durations={durations}
-                  onDurationChange={handleDurationChange}
-                />
+                messages={messages}
+                status={status}
+                durations={durations}
+                onDurationChange={handleDurationChange}
+                onGuide={(prompt) => {
+                  sendMessage({
+                    role: "user",
+                    parts: [{ type: "text", text: prompt }],
+                  });
+                }}
+              />
                 {status === "submitted" && (
                   <div className="flex justify-start max-w-3xl w-full">
                     <Loader2 className="size-4 animate-spin text-muted-foreground" />
