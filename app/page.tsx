@@ -41,6 +41,30 @@ type StorageData = {
   durations: Record<string, number>;
 };
 
+async function convertFilesToDataURLs(
+  files: FileList,
+): Promise<FilePart[]> {
+  return Promise.all(
+    Array.from(files).map(
+      (file) =>
+        new Promise<FilePart>((resolve, reject) => {
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            resolve({
+              type: "file",
+              filename: file.name,
+              mediaType: file.type,
+              url: reader.result as string, // Data URL
+            });
+          };
+
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        }),
+    ),
+  );
+}
 
 const loadMessagesFromStorage = (): {
   messages: UIMessage[];
