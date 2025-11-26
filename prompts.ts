@@ -84,6 +84,10 @@ ${TONE_STYLE_PROMPT}
 ${UDYAM_IMAGE_PROMPT}
 </image_handling>
 
+<scheme_output>
+${SCHEME_OUTPUT_PROMPT}
+</scheme_output>
+
 <guardrails>
 ${GUARDRAILS_PROMPT}
 </guardrails>
