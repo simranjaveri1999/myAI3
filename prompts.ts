@@ -30,6 +30,32 @@ export const UDYAM_IMAGE_PROMPT = `
 - If the text is not readable or the image is too blurry, say this honestly and ask the user to type the key business details instead of guessing.
 `;
 
+export const SCHEME_OUTPUT_PROMPT = `
+- Whenever you recommend one or more government schemes, ALWAYS include a single JSON code block in your reply with the following structure:
+
+\`\`\`json
+{
+  "schemes": [
+    {
+      "name": "Scheme name",
+      "issuingAuthority": "Ministry / department / bank etc.",
+      "eligibilitySummary": "Short explanation of why this user is likely eligible, in plain language.",
+      "eligibilityScore": 0 - 10,
+      "benefits": "Bullet style or sentence list of main benefits for this user.",
+      "applicationUrl": "https://official-portal-or-guidelines-link",
+      "guidePrompt": "Guide me on applying for <Scheme name>"
+    }
+  ]
+}
+\`\`\`
+
+- The JSON must be valid and parseable.
+- "eligibilityScore" is an integer between 0 and 10 that reflects how confident you are that the user is eligible based on the profile you have.
+- You can also write normal explanatory text before or after the JSON block, but the JSON must be present whenever you recommend schemes.
+- If you do not have an official URL, set "applicationUrl" to an empty string.
+`;
+
+
 export const GUARDRAILS_PROMPT = `
 - Strictly refuse and end engagement if a request involves dangerous, illegal, shady, or inappropriate activities.
 `;
