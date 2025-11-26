@@ -11,6 +11,15 @@ type Scheme = {
   guidePrompt: string;
 };
 
+type AssistantMessageProps = {
+  message: UIMessage;
+  status?: string;
+  isLastMessage?: boolean;
+  durations?: Record<string, number>;
+  onDurationChange?: (key: string, duration: number) => void;
+  onGuide?: (prompt: string) => void;
+};
+
 function extractSchemesFromText(text: string): {
   schemes: Scheme[] | null;
   cleanedText: string;
@@ -34,7 +43,13 @@ function extractSchemesFromText(text: string): {
   }
 }
 
-function SchemeCard({ scheme, onGuideClick }: { scheme: Scheme; onGuideClick: (prompt: string) => void }) {
+function SchemeCard({
+  scheme,
+  onGuideClick,
+}: {
+  scheme: Scheme;
+  onGuideClick: (prompt: string) => void;
+}) {
   return (
     <div className="w-full rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm space-y-2">
       <div className="flex justify-between items-center gap-2">
@@ -81,7 +96,12 @@ function SchemeCard({ scheme, onGuideClick }: { scheme: Scheme; onGuideClick: (p
 
         <button
           className="text-[11px] px-3 py-1 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 transition"
-          onClick={() => onGuideClick(scheme.guidePrompt || `Guide me on applying for ${scheme.name}`)}
+          onClick={() =>
+            onGuideClick(
+              scheme.guidePrompt ||
+                `Guide me on applying for ${scheme.name}`,
+            )
+          }
         >
           Guide me on applying
         </button>
@@ -90,11 +110,13 @@ function SchemeCard({ scheme, onGuideClick }: { scheme: Scheme; onGuideClick: (p
   );
 }
 
-export function AssistantMessage({ message, onGuide }: { message: UIMessage; onGuide?: (prompt: string) => void }) {
+export function AssistantMessage(props: AssistantMessageProps) {
+  const { message, onGuide } = props;
+
   // Merge all text parts into one string
   const fullText = message.parts
     .filter((part) => part.type === "text")
-    .map((part) => "text" in part ? part.text : "")
+    .map((part) => ("text" in part ? part.text : ""))
     .join("\n\n");
 
   const { schemes, cleanedText } = extractSchemesFromText(fullText);
