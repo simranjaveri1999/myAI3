@@ -165,9 +165,26 @@ export default function Chat() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    sendMessage({ text: data.message });
+ async function onSubmit(data: z.infer<typeof formSchema>) {
+    let fileParts: FilePart[] = [];
+
+    if (files && files.length > 0) {
+      fileParts = await convertFilesToDataURLs(files);
+    }
+
+    await sendMessage({
+      role: "user",
+      parts: [
+        { type: "text", text: data.message },
+        ...fileParts,
+      ],
+    });
+
     form.reset();
+    setFiles(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   }
 
   function clearChat() {
