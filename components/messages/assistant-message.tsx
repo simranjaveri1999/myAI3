@@ -50,6 +50,10 @@ function SchemeCard({
   scheme: Scheme;
   onGuideClick: (prompt: string) => void;
 }) {
+  const hasApplicationUrl =
+    typeof scheme.applicationUrl === "string" &&
+    scheme.applicationUrl.trim().length > 0;
+
   return (
     <div className="w-full rounded-xl border border-neutral-300 bg-white p-4 shadow-md hover:shadow-lg transition-all duration-200">
       <div className="flex justify-between items-start gap-2">
@@ -81,7 +85,7 @@ function SchemeCard({
       </div>
 
       <div className="mt-3 flex justify-between items-center gap-2">
-        {scheme.applicationUrl?.trim() && (
+        {hasApplicationUrl && (
           <a
             href={scheme.applicationUrl}
             target="_blank"
@@ -92,15 +96,15 @@ function SchemeCard({
           </a>
         )}
 
-        {scheme.applicationUrl?.trim() && (
+        {hasApplicationUrl && (
           <button
             className="ml-auto text-[11px] px-4 py-2 rounded-md bg-[#0052CC] text-white font-semibold hover:bg-[#003E99] transition"
-            onClick={() =>
-              onGuideClick(
-                scheme.guidePrompt ||
-                  `Guide me on applying for ${scheme.name}`,
-              )
-            }
+            onClick={() => {
+              const prompt =
+                scheme.guidePrompt ??
+                `Guide me on applying for ${scheme.name}`;
+              onGuideClick(prompt);
+            }}
           >
             Guide me on applying
           </button>
@@ -109,7 +113,6 @@ function SchemeCard({
     </div>
   );
 }
-
 
         <button
           className="text-[11px] px-3 py-1 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 transition"
