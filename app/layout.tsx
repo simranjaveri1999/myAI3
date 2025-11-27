@@ -2,12 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-export const metadata = {
-  title: "Chatbot MyAI",
-  icons: {
-    icon: "/favicon.svg",
-  },
-};
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "MyAI3",
   description: "MyAI3",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
