@@ -13,11 +13,9 @@ import { ArrowUp, Eraser, Loader2, Plus, PlusIcon, Square } from "lucide-react";
 import { MessageWall } from "@/components/messages/message-wall";
 import { ChatHeader } from "@/app/parts/chat-header";
 import { ChatHeaderBlock } from "@/app/parts/chat-header";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UIMessage } from "ai";
 import { useEffect, useState, useRef } from "react";
-import { AI_NAME, CLEAR_CHAT_TEXT, OWNER_NAME, WELCOME_MESSAGE } from "@/config";
-import Image from "next/image";
+import { CLEAR_CHAT_TEXT, OWNER_NAME, WELCOME_MESSAGE } from "@/config";
 import Link from "next/link";
 
 const formSchema = z.object({
@@ -27,7 +25,7 @@ const formSchema = z.object({
     .max(2000, "Message must be at most 2000 characters."),
 });
 
-const STORAGE_KEY = 'chat-messages';
+const STORAGE_KEY = "chat-messages";
 
 type FilePart = {
   type: "file";
@@ -41,9 +39,7 @@ type StorageData = {
   durations: Record<string, number>;
 };
 
-async function convertFilesToDataURLs(
-  files: FileList,
-): Promise<FilePart[]> {
+async function convertFilesToDataURLs(files: FileList): Promise<FilePart[]> {
   return Promise.all(
     Array.from(files).map(
       (file) =>
@@ -108,7 +104,10 @@ export default function Chat() {
   const [files, setFiles] = useState<FileList | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const stored = typeof window !== 'undefined' ? loadMessagesFromStorage() : { messages: [], durations: {} };
+  const stored =
+    typeof window !== "undefined"
+      ? loadMessagesFromStorage()
+      : { messages: [], durations: {} };
   const [initialMessages] = useState<UIMessage[]>(stored.messages);
 
   const { messages, sendMessage, status, stop, setMessages } = useChat({
@@ -119,6 +118,7 @@ export default function Chat() {
     setIsClient(true);
     setDurations(stored.durations);
     setMessages(stored.messages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -165,7 +165,7 @@ export default function Chat() {
     },
   });
 
- async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     let fileParts: FilePart[] = [];
 
     if (files && files.length > 0) {
@@ -174,10 +174,7 @@ export default function Chat() {
 
     await sendMessage({
       role: "user",
-      parts: [
-        { type: "text", text: data.message },
-        ...fileParts,
-      ],
+      parts: [{ type: "text", text: data.message }, ...fileParts],
     });
 
     form.reset();
@@ -202,37 +199,21 @@ export default function Chat() {
     <div className="flex h-screen items-center justify-center font-sans dark:bg-black">
       <main className="w-full dark:bg-black h-screen relative">
         {/* Top header */}
-        <div className="fixed top-0 left-0 right-0 z-50 bg-linear-to-b from-background via-background/50 to-transparent dark:bg-black overflow-visible pb-16">
-          <div className="relative overflow-visible">
-            <ChatHeader>
-              <ChatHeaderBlock />
-              <ChatHeaderBlock className="justify-center items-center">
-                <Avatar className="size-8 ring-1 ring-primary">
-                  <AvatarImage src="/logo.png" />
-                  <AvatarFallback>
-                    <Image
-                      src="/logo.png"
-                      alt="Logo"
-                      width={36}
-                      height={36}
-                    />
-                  </AvatarFallback>
-                </Avatar>
-                <p className="tracking-tight">Chat with {AI_NAME}</p>
-              </ChatHeaderBlock>
-              <ChatHeaderBlock className="justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="cursor-pointer"
-                  onClick={clearChat}
-                >
-                  <Plus className="size-4" />
-                  {CLEAR_CHAT_TEXT}
-                </Button>
-              </ChatHeaderBlock>
-            </ChatHeader>
-          </div>
+        <div className="fixed top-0 left-0 right-0 z-50">
+          <ChatHeader>
+            {/* Right side: clear chat button only */}
+            <ChatHeaderBlock className="ml-auto justify-end">
+              <Button
+                variant="outline"
+                size="sm"
+                className="cursor-pointer"
+                onClick={clearChat}
+              >
+                <Plus className="size-4" />
+                {CLEAR_CHAT_TEXT}
+              </Button>
+            </ChatHeaderBlock>
+          </ChatHeader>
         </div>
 
         {/* Messages area */}
@@ -241,17 +222,17 @@ export default function Chat() {
             {isClient ? (
               <>
                 <MessageWall
-                messages={messages}
-                status={status}
-                durations={durations}
-                onDurationChange={handleDurationChange}
-                onGuide={(prompt) => {
-                  sendMessage({
-                    role: "user",
-                    parts: [{ type: "text", text: prompt }],
-                  });
-                }}
-              />
+                  messages={messages}
+                  status={status}
+                  durations={durations}
+                  onDurationChange={handleDurationChange}
+                  onGuide={(prompt) => {
+                    sendMessage({
+                      role: "user",
+                      parts: [{ type: "text", text: prompt }],
+                    });
+                  }}
+                />
                 {status === "submitted" && (
                   <div className="flex justify-start max-w-3xl w-full">
                     <Loader2 className="size-4 animate-spin text-muted-foreground" />
@@ -285,75 +266,75 @@ export default function Chat() {
                           Message
                         </FieldLabel>
                         <div className="relative h-13">
-  {/* Hidden file input for image upload */}
-  <input
-    ref={fileInputRef}
-    type="file"
-    accept="image/*"
-    className="hidden"
-    onChange={(event) => {
-      const selectedFiles = event.target.files;
-      if (selectedFiles && selectedFiles.length > 0) {
-        setFiles(selectedFiles);
-      } else {
-        setFiles(null);
-      }
-    }}
-  />
+                          {/* Hidden file input for image upload */}
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(event) => {
+                              const selectedFiles = event.target.files;
+                              if (selectedFiles && selectedFiles.length > 0) {
+                                setFiles(selectedFiles);
+                              } else {
+                                setFiles(null);
+                              }
+                            }}
+                          />
 
-  {/* Upload button on the left */}
-  <Button
-    type="button"
-    size="icon"
-    variant="ghost"
-    className="absolute left-2 top-2 rounded-full"
-    onClick={() => fileInputRef.current?.click()}
-    disabled={status === "streaming"}
-  >
-    <PlusIcon className="size-4" />
-  </Button>
+                          {/* Upload button on the left */}
+                          <Button
+                            type="button"
+                            size="icon"
+                            variant="ghost"
+                            className="absolute left-2 top-2 rounded-full"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={status === "streaming"}
+                          >
+                            <PlusIcon className="size-4" />
+                          </Button>
 
-  {/* Text input */}
-  <Input
-    {...field}
-    id="chat-form-message"
-    className="h-15 pr-15 pl-10 bg-card rounded-[20px]"
-    placeholder="Type your message here..."
-    disabled={status === "streaming"}
-    aria-invalid={fieldState.invalid}
-    autoComplete="off"
-    onKeyDown={(e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        form.handleSubmit(onSubmit)();
-      }
-    }}
-  />
+                          {/* Text input */}
+                          <Input
+                            {...field}
+                            id="chat-form-message"
+                            className="h-15 pr-15 pl-10 bg-card rounded-[20px]"
+                            placeholder="Type your message here..."
+                            disabled={status === "streaming"}
+                            aria-invalid={fieldState.invalid}
+                            autoComplete="off"
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" && !e.shiftKey) {
+                                e.preventDefault();
+                                form.handleSubmit(onSubmit)();
+                              }
+                            }}
+                          />
 
-  {/* Send button or stop button */}
-  {(status == "ready" || status == "error") && (
-    <Button
-      className="absolute right-3 top-3 rounded-full"
-      type="submit"
-      disabled={!field.value.trim()}
-      size="icon"
-    >
-      <ArrowUp className="size-4" />
-    </Button>
-  )}
-  {(status == "streaming" || status == "submitted") && (
-    <Button
-      className="absolute right-2 top-2 rounded-full"
-      size="icon"
-      onClick={() => {
-        stop();
-      }}
-    >
-      <Square className="size-4" />
-    </Button>
-  )}
-</div>
-
+                          {/* Send button or stop button */}
+                          {(status === "ready" || status === "error") && (
+                            <Button
+                              className="absolute right-3 top-3 rounded-full"
+                              type="submit"
+                              disabled={!field.value.trim()}
+                              size="icon"
+                            >
+                              <ArrowUp className="size-4" />
+                            </Button>
+                          )}
+                          {(status === "streaming" ||
+                            status === "submitted") && (
+                            <Button
+                              className="absolute right-2 top-2 rounded-full"
+                              size="icon"
+                              onClick={() => {
+                                stop();
+                              }}
+                            >
+                              <Square className="size-4" />
+                            </Button>
+                          )}
+                        </div>
                       </Field>
                     )}
                   />
