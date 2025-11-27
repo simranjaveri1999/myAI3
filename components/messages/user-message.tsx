@@ -4,7 +4,7 @@ import { Response } from "@/components/ai-elements/response";
 export function UserMessage({ message }: { message: UIMessage }) {
     return (
         <div className="whitespace-pre-wrap w-full flex justify-end">
-            <div className="max-w-lg w-fit px-4 py-3 rounded-[20px] bg-neutral-100">
+           <div className="max-w-xl w-fit px-4 py-3 rounded-2xl bg-white border border-neutral-300 shadow-sm">
                 <div className="text-sm flex flex-col gap-2 items-end">
                     {message.parts.map((part, i) => {
                         switch (part.type) {
