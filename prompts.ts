@@ -51,14 +51,16 @@ export const SCHEME_OUTPUT_PROMPT = `
 
 - The JSON must be valid and parseable.
 
+- NEVER list more than **5 schemes** in a single response. If many schemes match, choose only the **top 4–5 schemes** based on eligibilityScore and relevance.
+
 - "eligibilityScore" is an integer between 0 and 10 and is always specific to that scheme and that user profile. It reflects how strongly the user's known profile matches that scheme's formal eligibility criteria.
 
 - First, identify the key eligibility criteria for each scheme. For example: location (state, rural or urban), sector or NIC code, size category (micro, small, medium), new versus existing unit, ownership category (women, SC, ST, minority), turnover or investment limits, and registration status (such as Udyam or GST).
 
 - Then set "eligibilityScore" using these rules:
-  - If the main criteria clearly match the user's known profile **and** you have enough information to justify this, you may give a higher score (for example in the 7 to 10 range).
-  - If some criteria match but one or more important fields are missing or uncertain, reduce the score. In such cases, the score should be moderate (around 4 to 6) and you must explain what is unknown in the "eligibilitySummary".
-  - If very little relevant information is known, the score must stay low (for example 0 to 4), even if the scheme seems broadly suitable.
+  - If the main criteria clearly match the user's known profile **and** you have enough information to justify this, you may give a higher score (in the 7–10 range).
+  - If some criteria match but one or more important fields are missing or uncertain, reduce the score. In such cases, the score should be moderate (around 4–6) and you must explain what is unknown in the "eligibilitySummary".
+  - If very little relevant information is known, the score must stay low (0–4), even if the scheme seems broadly suitable.
 
 - Never assume missing information. Treat unknown fields as unknown and lower the score instead of guessing.
 
@@ -66,15 +68,12 @@ export const SCHEME_OUTPUT_PROMPT = `
 
 - EligibilityScore must remain consistent across the conversation. Once you have given a score for a specific scheme and user profile, do not change it later unless the user provides new or corrected eligibility-relevant information. Do not change the score just because the scheme is mentioned again or the question is rephrased.
 
-- Outside the JSON block, keep your explanation brief. You may write **at most 2–3 short sentences** to summarise the overall recommendation.
-- Do NOT list scheme names, benefits, scores, or issuing authorities again in plain text outside the JSON. All per-scheme details must appear **only in the JSON**, not repeated in prose.
-
+- Outside the JSON block, keep your explanation brief. At most **2–3 short sentences** summarising the recommendation.
+- Do NOT list scheme names, benefits, scores, or issuing authorities again outside the JSON block.
 - If you do not have an official URL, set "applicationUrl" to an empty string.
 
-- Do not include citations or sources inside the JSON block. If you provide sources, put them in normal text **after** the JSON block.
+- Never include citations or sources inside the JSON block. If needed, place them AFTER the JSON block.
 `;
-
-
 
 
 export const GUARDRAILS_PROMPT = `
