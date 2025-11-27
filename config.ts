@@ -34,7 +34,7 @@ export const AI_NAME = "MSME Scheme Guide";
 export const OWNER_NAME = "Simran Javeri";
 export const OWNER_NAME_2 = "Sourish Dewani";
 
-export const WELCOME_MESSAGE = `Hello! I'm ${AI_NAME}, an AI assistant created by ${OWNER_NAME} and ${OWNER_NAME_2}. Tell me about your business or upload your Udhyam and I can instantly match all government schemes and grants you are eligible for. `
+export const WELCOME_MESSAGE = `Hello! I'm ${AI_NAME}, an AI assistant created by ${OWNER_NAME} and ${OWNER_NAME_2}. Tell me about your business or upload your Udyam certificate and I can instantly match all government schemes and grants you are eligible for. `
 
 export const CLEAR_CHAT_TEXT = "New";
 
