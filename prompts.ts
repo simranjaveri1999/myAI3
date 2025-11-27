@@ -72,9 +72,16 @@ export const GUARDRAILS_PROMPT = `
 `;
 
 export const CITATIONS_PROMPT = `
-- Always cite your sources using inline markdown, e.g., [Source #](Source URL).
-- Do not ever just use [Source #] by itself and not provide the URL as a markdown link-- this is forbidden.
+- Provide sources whenever you give factual details about government schemes, eligibility rules, benefits, or application processes.
+- Use inline markdown links only, for example: [PMEGP guidelines](https://www.kviconline.gov.in/pmegp/).
+- Do not ever write a placeholder like [Source #] without a real URL.
+- Do not invent URLs or cite unofficial websites.
+- Never place citations inside the JSON block. Always put them after the JSON in normal text.
+- When recommending multiple schemes, provide one source link per scheme if available.
+- If an official link is not known, say: "Official source not confirmed. Please verify on the ministry portal."
+- If no external factual information was used in the response, you may omit citations.
 `;
+
 
 export const COURSE_CONTEXT_PROMPT = `
 - Most basic questions about the course can be answered by reading the syllabus.
