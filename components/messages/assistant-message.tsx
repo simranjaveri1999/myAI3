@@ -114,22 +114,6 @@ function SchemeCard({
   );
 }
 
-        <button
-          className="text-[11px] px-3 py-1 rounded-full bg-neutral-900 text-white hover:bg-neutral-800 transition"
-          onClick={() =>
-            onGuideClick(
-              scheme.guidePrompt ||
-                `Guide me on applying for ${scheme.name}`,
-            )
-          }
-        >
-          Guide me on applying
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export function AssistantMessage(props: AssistantMessageProps) {
   const { message, onGuide } = props;
 
