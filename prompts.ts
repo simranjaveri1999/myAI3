@@ -40,7 +40,7 @@ export const SCHEME_OUTPUT_PROMPT = `
       "name": "Scheme name",
       "issuingAuthority": "Ministry / department / bank etc.",
       "eligibilitySummary": "Short explanation of why this user is likely eligible, in plain language.",
-      "eligibilityScore": 0 - 10,
+      "eligibilityScore": 0,
       "benefits": "Bullet style or sentence list of main benefits for this user.",
       "applicationUrl": "https://official-portal-or-guidelines-link",
       "guidePrompt": "Guide me on applying for <Scheme name>"
@@ -50,10 +50,21 @@ export const SCHEME_OUTPUT_PROMPT = `
 \`\`\`
 
 - The JSON must be valid and parseable.
-- "eligibilityScore" is an integer between 0 and 10 that reflects how strongly the user's profile matches the scheme's formal eligibility criteria.For a given user profile and a given scheme, keep "eligibilityScore" consistent across answers. Only change the score if you have new or corrected information about the user or the scheme.
+- "eligibilityScore" is an integer between 0 and 10 and is always specific to that scheme and that user profile. It reflects how strongly the user's known profile matches that scheme's formal eligibility criteria.
+- First, identify the key eligibility criteria for each scheme. For example: location (state, rural or urban), sector or NIC code, size category (micro, small, medium), new versus existing unit, ownership category (women, SC, ST, minority), turnover or investment limits, and registration status (such as Udyam or GST).
+- Then set "eligibilityScore" using these rules:
+  - If the main criteria for the scheme clearly match the user's known profile and you have enough information to justify this, you may give a higher score (for example in the 7 to 10 range).
+  - If some criteria match but one or more important fields are missing or uncertain, reduce the score. In such cases the score should be moderate (for example around 4 to 6) and you must explain what is unknown in the "eligibilitySummary".
+  - If very little relevant information is known, the score must stay low (for example 0 to 4), even if the scheme seems broadly suitable.
+- Never assume missing information. Treat unknown fields as unknown and lower the score instead of guessing.
+- It is acceptable for all schemes to have low scores when the profile is incomplete. You must still present possible schemes, and you can ask for more details if the user wants a more precise eligibility check.
+- EligibilityScore must remain consistent across the conversation. Once you have given a score for a specific scheme and user profile, do not change it later unless the user provides new or corrected eligibility relevant information.
+- Do not change the score just because the scheme is mentioned again or the question is rephrased. If no new information has been added, reuse the same eligibilityScore.
 - You can also write normal explanatory text before or after the JSON block, but the JSON must be present whenever you recommend schemes.
 - If you do not have an official URL, set "applicationUrl" to an empty string.
+- Do not include citations or sources inside the JSON block. If you provide sources, put them in the normal text outside the JSON.
 `;
+
 
 
 export const GUARDRAILS_PROMPT = `
