@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MyAI3",
+  title: "MSME Scheme Guide",
   description: "MyAI3",
   icons: {
     icon: "/favicon.svg",
