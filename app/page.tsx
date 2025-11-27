@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useChat } from "@ai-sdk/react";
-import { ArrowUp, Eraser, Loader2, Plus, PlusIcon, Square } from "lucide-react";
+import { ArrowUp, Loader2, Plus, PlusIcon, Square } from "lucide-react";
 import { MessageWall } from "@/components/messages/message-wall";
 import { ChatHeader } from "@/app/parts/chat-header";
 import { ChatHeaderBlock } from "@/app/parts/chat-header";
@@ -19,9 +19,9 @@ import { CLEAR_CHAT_TEXT, OWNER_NAME, WELCOME_MESSAGE } from "@/config";
 import Link from "next/link";
 
 const formSchema = z.object({
+  // Allow empty string; we'll manually enforce "text OR file"
   message: z
     .string()
-    .min(1, "Message cannot be empty.")
     .max(2000, "Message must be at most 2000 characters."),
 });
 
@@ -166,15 +166,24 @@ export default function Chat() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const trimmed = data.message.trim();
+    const hasFiles = !!files && files.length > 0;
+
+    // Enforce: must have either text OR an attached file
+    if (!trimmed && !hasFiles) {
+      toast.error("Please type a message or attach an image.");
+      return;
+    }
+
     let fileParts: FilePart[] = [];
 
-    if (files && files.length > 0) {
-      fileParts = await convertFilesToDataURLs(files);
+    if (hasFiles) {
+      fileParts = await convertFilesToDataURLs(files as FileList);
     }
 
     await sendMessage({
       role: "user",
-      parts: [{ type: "text", text: data.message }, ...fileParts],
+      parts: [{ type: "text", text: trimmed }, ...fileParts],
     });
 
     form.reset();
@@ -194,6 +203,15 @@ export default function Chat() {
 
     toast.success("Chat cleared");
   }
+
+  const hasAttachedFiles = !!files && files.length > 0;
+
+  // For display label like "Attached: image.jpg" or "Attached: 2 images"
+  const attachedLabel = hasAttachedFiles
+    ? files!.length === 1
+      ? `Attached: ${files![0].name}`
+      : `Attached: ${files!.length} images`
+    : "";
 
   return (
     <div className="flex h-screen items-center justify-center font-sans dark:bg-black">
@@ -267,7 +285,7 @@ export default function Chat() {
                         </FieldLabel>
 
                         {/* GOV-STYLE INPUT SHELL */}
-                        <div className="relative h-13">
+                        <div className="relative">
                           {/* Hidden file input for image upload */}
                           <input
                             ref={fileInputRef}
@@ -319,7 +337,9 @@ export default function Chat() {
                               <Button
                                 className="rounded-full"
                                 type="submit"
-                                disabled={!field.value.trim()}
+                                disabled={
+                                  !field.value.trim() && !hasAttachedFiles
+                                }
                                 size="icon"
                               >
                                 <ArrowUp className="size-4" />
@@ -338,6 +358,13 @@ export default function Chat() {
                               </Button>
                             )}
                           </div>
+
+                          {/* Attached file label */}
+                          {hasAttachedFiles && (
+                            <p className="mt-1 text-[11px] text-neutral-600 px-2">
+                              {attachedLabel}
+                            </p>
+                          )}
                         </div>
                       </Field>
                     )}
