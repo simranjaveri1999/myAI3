@@ -133,7 +133,7 @@ export function AssistantMessage(props: AssistantMessageProps) {
 
   return (
     <div className="whitespace-pre-wrap w-full flex justify-start">
-      <div className="max-w-xl w-fit px-4 py-3 rounded-[20px] bg-white border border-neutral-200 space-y-3">
+    <div className="max-w-xl w-fit px-4 py-3 rounded-2xl bg-white border border-neutral-200 shadow-sm space-y-3">
         {cleanedText && (
           <div className="text-sm">
             <Response>{cleanedText}</Response>
